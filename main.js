@@ -1,9 +1,17 @@
 let inputTask = document.getElementById("input-task");
 let addTaskBtn = document.getElementById("add-task");
-taskList = [];
+let taskTabs = document.querySelectorAll(".task-tabs div");
+let taskList = [];
+let filterList = [];
+let taskStatus = 'all';
 
 addTaskBtn.addEventListener("click",addTask)
 
+for (let i=1;i<taskTabs.length;i++){
+    taskTabs[i].addEventListener("click",function(event){
+        filterTask(event);
+    })
+}
 
 function addTask(){
     let task = {
@@ -20,22 +28,29 @@ function addTask(){
 
 
 function render(){
+    let list = [];
+    if (taskStatus == "all"){
+        list = taskList
+    } else {
+        list = filterList;
+    }
     let resultHTML = "";
-    for (i=0;i<taskList.length;i++){
-        if (taskList[i].isComplete == true){
+    
+    for (let i=0;i<list.length;i++){
+        if (list[i].isComplete == true){
             resultHTML += `<div class="task task-done">
-            <div class="task-item">${taskList[i].taskValue}</div>
+            <div class="task-item">${list[i].taskValue}</div>
             <div>
-                <button onclick="completeTask('${taskList[i].id}')"><i class="fa-solid fa-repeat"></i></button>
-                <button onclick="deleteTask('${taskList[i].id}')"><i class="fa-regular fa-trash-can"></i></button>
+                <button onclick="completeTask('${list[i].id}')"><i class="fa-solid fa-repeat"></i></button>
+                <button onclick="deleteTask('${list[i].id}')"><i class="fa-regular fa-trash-can"></i></button>
             </div>
         </div>`
         } else {
             resultHTML += `<div class="task">
-            <div>${taskList[i].taskValue}</div>
+            <div>${list[i].taskValue}</div>
             <div>
-                <button onclick="completeTask('${taskList[i].id}')"><i class="fa-regular fa-circle-check"></i></button>
-                <button onclick="deleteTask('${taskList[i].id}')"><i class="fa-regular fa-trash-can"></i></button>
+                <button onclick="completeTask('${list[i].id}')"><i class="fa-regular fa-circle-check"></i></button>
+                <button onclick="deleteTask('${list[i].id}')"><i class="fa-regular fa-trash-can"></i></button>
             </div>
         </div>`
         }
@@ -46,7 +61,7 @@ document.getElementById("task-board").innerHTML=resultHTML;
 }
 
 function completeTask(id){
-    for(i=0;i<taskList.length;i++){
+    for(let i=0;i<taskList.length;i++){
         if (taskList[i].id==id){
             taskList[i].isComplete = !taskList[i].isComplete;
         }
@@ -56,9 +71,24 @@ function completeTask(id){
 }
 
 function deleteTask(id){
-    for(i=0;i<taskList.length;i++){
+    for(let i=0;i<taskList.length;i++){
         if (taskList[i].id==id){
             taskList.splice(i,1)
+        }
+    }
+    render();
+}
+
+function filterTask(){
+    taskStatus = taskTabs.target.event
+    filterList = [];
+    for(let i=1;i<taskList.length;i++){
+        if (taskStatus == "all"){
+            filterList = taskList
+        } else if (taskStatus == "ongoing" ){
+            filterList.push(taskList[i].isComplete=false)
+        } else if (taskStatus == "done"){
+            filterList.push(taskList[i].isComplete==true)
         }
     }
     render();
