@@ -13,6 +13,8 @@ for (let i=1;i<taskTabs.length;i++){
     })
 }
 
+
+
 function addTask(){
     let task = {
         id : randomIDgenerate(),
@@ -30,7 +32,7 @@ function addTask(){
 function render(){
     let list = [];
     if (taskStatus == "all"){
-        list = taskList
+        list = taskList;
     } else {
         list = filterList;
     }
@@ -79,19 +81,27 @@ function deleteTask(id){
     render();
 }
 
-function filterTask(){
-    taskStatus = taskTabs.target.event
+function filterTask(event){
+    taskStatus = event.target.id
     filterList = [];
-    for(let i=1;i<taskList.length;i++){
-        if (taskStatus == "all"){
-            filterList = taskList
-        } else if (taskStatus == "ongoing" ){
-            filterList.push(taskList[i].isComplete=false)
-        } else if (taskStatus == "done"){
-            filterList.push(taskList[i].isComplete==true)
+    if (taskStatus === "all"){
+        render();
+    } else if(taskStatus === "ongoing"){
+        for (let i=0;i<taskList.length;i++){
+            if(taskList[i].isComplete === false){
+                filterList.push(taskList[i])
+            }
         }
+        render();
+
+    } else {
+        for (let i=0;i<taskList.length;i++){
+            if(taskList[i].isComplete === true){
+                filterList.push(taskList[i])
+            }
+        }
+        render();
     }
-    render();
 }
 
 
