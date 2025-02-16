@@ -17,7 +17,7 @@ function addTask(){
 
 function render(){
     let resultHTML = "";
-    for (i=0;i<task.length;i++){
+    for (let i=0;i<task.length;i++){
         resultHTML += `<div class="task">
             <div>${task[i]}</div>
             <div>
