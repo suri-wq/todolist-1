@@ -42,3 +42,11 @@ body{
     justify-content: space-between;
     padding:1em;
 }
+
+.task-done{
+    background-color: lightgray;
+}
+
+.task-done .task-item{
+    text-decoration: line-through;
+}
